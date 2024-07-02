@@ -1,6 +1,6 @@
 const express = require('express');
 const mongoose = require('mongoose');
-const Book = require('./models/Book');
+const booksRoutes = require('./routes/books');
 
 // connexion à la base de données
 mongoose.connect('mongodb+srv://MonVieuxGrimoire:w53IEU1EGXcIDonr@cluster0.srwo35g.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0',
@@ -14,6 +14,7 @@ const app = express();
 
 // Middleware permettant à Express d'extraire le corps JSON des requêtes POST
 app.use(express.json());
+app.use('/api/books', booksRoutes);
 
 // Middleware gérant les erreurs de CORS
 app.use((req, res, next) => {
@@ -25,40 +26,6 @@ app.use((req, res, next) => {
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS');
   next();
 });
-// POST => Enregistrement d'un livre
-app.post('/api/books', (req, res, next) => {
-  delete req.body._id;
-  const book = new Book({
-    ...req.body
-  });
-  book.save()
-    .then(() => res.status(201).json({ message: 'Objet enregistré !'}))
-    .catch(error => res.status(400).json({ error }));
-});
 
-// GET => Récupération de tous les livres
-  app.get('/api/books', (req, res, next) => {
-    Book.find()
-      .then(books => res.status(200).json(books))
-      .catch(error => res.status(400).json({ error }));
-  });
-// GET => Récupération d'un livre spécifique
-  app.get('/api/books/:id', (req, res, next) => {
-    Book.findOne({ _id: req.params.id })
-      .then(book => res.status(200).json(book))
-      .catch(error => res.status(404).json({ error }));
-  });
-// PUT => Modification d'un livre existant
-  app.put('/api/books/:id', (req, res, next) => {
-    Book.updateOne({ _id: req.params.id }, { ...req.body, _id: req.params.id })
-      .then(() => res.status(200).json({ message: 'Objet modifié !'}))
-      .catch(error => res.status(400).json({ error }));
-  });
-  // DELETE => Suppression d'un livre
-  app.delete('/api/books/:id', (req, res, next) => {
-    Book.deleteOne({ _id: req.params.id })
-      .then(() => res.status(200).json({ message: 'Objet supprimé !'}))
-      .catch(error => res.status(400).json({ error }));
-  });
 
 module.exports = app;
