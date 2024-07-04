@@ -1,6 +1,9 @@
 const express = require('express');
+//const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
+
 const booksRoutes = require('./routes/books');
+const userRoutes = require ('./routes/user');
 
 // connexion à la base de données
 mongoose.connect('mongodb+srv://MonVieuxGrimoire:w53IEU1EGXcIDonr@cluster0.srwo35g.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0',
@@ -12,9 +15,6 @@ mongoose.connect('mongodb+srv://MonVieuxGrimoire:w53IEU1EGXcIDonr@cluster0.srwo3
   //création de l'application
 const app = express();
 
-// Middleware permettant à Express d'extraire le corps JSON des requêtes POST
-app.use(express.json());
-app.use('/api/books', booksRoutes);
 
 // Middleware gérant les erreurs de CORS
 app.use((req, res, next) => {
@@ -27,5 +27,11 @@ app.use((req, res, next) => {
   next();
 });
 
+// Middleware permettant à Express d'extraire le corps JSON des requêtes POST
+app.use(express.json());
+//app.use(bodyParser.json());
+
+app.use('/api/books', booksRoutes);
+app.use('/api/auth', userRoutes);
 
 module.exports = app;
