@@ -4,6 +4,7 @@ const mongoose = require('mongoose');
 
 const booksRoutes = require('./routes/books');
 const userRoutes = require ('./routes/user');
+const path = require ('path');
 
 // connexion à la base de données
 mongoose.connect('mongodb+srv://MonVieuxGrimoire:w53IEU1EGXcIDonr@cluster0.srwo35g.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0',
@@ -30,8 +31,11 @@ app.use((req, res, next) => {
 // Middleware permettant à Express d'extraire le corps JSON des requêtes POST
 app.use(express.json());
 //app.use(bodyParser.json());
+app.use('/images', express.static(path.join(__dirname, 'images')));
 
-app.use('/api/books', booksRoutes);
 app.use('/api/auth', userRoutes);
+app.use('/api/books', booksRoutes);
+
+
 
 module.exports = app;
