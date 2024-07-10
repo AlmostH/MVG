@@ -1,5 +1,4 @@
 const express = require('express');
-//const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 
 const booksRoutes = require('./routes/books');
@@ -30,9 +29,9 @@ app.use((req, res, next) => {
 
 // Middleware permettant à Express d'extraire le corps JSON des requêtes POST
 app.use(express.json());
-//app.use(bodyParser.json());
 app.use('/images', express.static(path.join(__dirname, 'images')));
 
+// Enregistrement des routeurs
 app.use('/api/auth', userRoutes);
 app.use('/api/books', booksRoutes);
 
