@@ -1,9 +1,16 @@
 const bcrypt = require('bcrypt');
 const User = require('../models/User');
 const jwt = require('jsonwebtoken');
+const validator = require('email-validator');
+
 
 // POST => Création de compte
 exports.signup = (req, res, next) => {
+
+    if (!validator.validate(req.body.email) || req.body.password.length < 8) {
+        console.log('Inscription impossible : email ou mot de passe invalide');
+        return res.status(400).json({ message: 'Inscription impossible : email ou mot de passe invalide' });
+      }
     // Appel de la fonction de hachage de bcrypt dans le MDP (qui est "salé" 10 fois)
     bcrypt.hash(req.body.password, 10)
     // Utilisation du hash pour créer un utilisateur
