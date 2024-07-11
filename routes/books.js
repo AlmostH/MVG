@@ -9,10 +9,11 @@ const bookCtrl = require('../controllers/books');
 
 
   // GET => Récupération de tous les livres
-    router.get('/', bookCtrl.getAllBooks);
+    router.get('/', bookCtrl.getAllBooks);  
+ // GET=> Récupération des 3 livres les mieux notés 
+    router.get('/bestrating', bookCtrl.getBestBooks);
   // GET => Récupération d'un livre spécifique
     router.get('/:id', bookCtrl.getOneBook);
-
    // POST => Enregistrement d'un livre
    router.post('/', auth, multer, resizeImage, bookCtrl.createBook );
   //POST => Ajout d'une note à un livre

@@ -109,3 +109,13 @@ exports.createBook = (req, res, next) => {
       })
       .catch((error) => res.status(500).json({ error }));
   };
+
+  // RÉCUPÉRATION DES 3 LIVRES LES MIEUX NOTÉS
+exports.getBestBooks = (req, res, next) => {
+    // recherche dans tous les livres
+    // trie les résultats en fonction de la propriété averageRating par ordre décroissant donc les mieux notés en premier
+    // limité à 3 résultats
+    Book.find().sort({ averageRating: -1 }).limit(3)
+      .then((books) => res.status(200).json(books))
+      .catch((error) => res.status(400).json({ error }));
+  };
