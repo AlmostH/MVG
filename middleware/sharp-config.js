@@ -9,7 +9,7 @@ const resizeImage = (req, res, next) => {
 
 
   sharp(req.file.path)
-    .resize(206, 260, { fit: 'cover' }) 
+    .resize({width: 206, height: 260}) 
     .toFormat('webp')
     .toFile('images/' + req.file.filename.replace(/\.(jpg|jpeg|png)$/, '.webp'))
 
