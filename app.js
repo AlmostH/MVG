@@ -27,8 +27,9 @@ app.use((req, res, next) => {
   next();
 });
 
-// Middleware permettant à Express d'extraire le corps JSON des requêtes POST
+// Middleware permettant à Express d'extraire le corps JSON des requêtes POST (req.body)
 app.use(express.json());
+
 app.use('/images', express.static(path.join(__dirname, 'images')));
 
 // Enregistrement des routeurs

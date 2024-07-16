@@ -1,20 +1,29 @@
 const Book = require('../models/Book');
+//donne accès aux fonctions qui nous permettent de modifier le système de fichiers
 const fs = require('fs');
 
+// AJOUT D'UN NOUVEAU LIVRE
 exports.createBook = (req, res, next) => {
     const bookObject = JSON.parse(req.body.book);
+    //Suppression de l'id pour génération d'un nouvel id unique par MongoDB
     delete bookObject._id;
+    // Suppression du userId pour associer le livre à l'userId authentifié
     delete bookObject._userId;
+      /* création nouvelle instance du modèle Book 
+      combine les propriétés de bookObject avec l'ID de l'utilisateur et l'URL de l'image*/
     const book = new Book({
         ...bookObject,
         userId: req.auth.userId,
         imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
     });
+    // Enregistrement du livre dans la base de données
     book.save()
       .then(() => res.status(201).json({ message: 'livre enregistré !'}))
       .catch(error => res.status(400).json({ error }));
   }
 
+
+// MODIFICATION D'UN LIVRE
   exports.modifyBook = (req, res, next) => {
     const bookObject = req.file ? {
         ...JSON.parse(req.body.book),
@@ -44,6 +53,8 @@ exports.createBook = (req, res, next) => {
         });
  };
 
+
+// SUPPRESSION D'UN LIVRE
  exports.deleteBook = (req, res, next) => {
     Book.findOne({ _id: req.params.id})
         .then(book => {
@@ -62,18 +73,20 @@ exports.createBook = (req, res, next) => {
             res.status(500).json({ error });
         });
  };
-
+// RÉCUPÉRATION D'UN LIVRE SELON ID
   exports.getOneBook = (req, res, next) => {
     Book.findOne({ _id: req.params.id })
       .then(book => res.status(200).json(book))
       .catch(error => res.status(404).json({ error }));
   }
-
+// RÉCUPÉRATION DE TOUS LES LIVRES
   exports.getAllBooks = (req, res, next) => {
     Book.find()
       .then(books => res.status(200).json(books))
       .catch(error => res.status(400).json({ error }));
   }
+
+  // NOTATION D'UN LIVRE
   exports.ratingBook = (req, res, next) => {
     // On extrait les valeurs userId et rating du corps de la requête
     const { userId, rating } = req.body;
@@ -113,7 +126,7 @@ exports.createBook = (req, res, next) => {
   // RÉCUPÉRATION DES 3 LIVRES LES MIEUX NOTÉS
 exports.getBestBooks = (req, res, next) => {
     // recherche dans tous les livres
-    // trie les résultats en fonction de la propriété averageRating par ordre décroissant donc les mieux notés en premier
+    // trie les résultats en fonction de la propriété averageRating par ordre décroissant (avererageRating:-1) donc les mieux notés en premier
     // limité à 3 résultats
     Book.find().sort({ averageRating: -1 }).limit(3)
       .then((books) => res.status(200).json(books))

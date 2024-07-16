@@ -34,7 +34,7 @@ exports.login = (req, res, next) => {
     User.findOne({ email: req.body.email })
         .then(user => {
             if (!user) {
-                return res.status(401).json({ message: 'Utilisateur non trouvé !' });
+                return res.status(401).json({ message:'Utilisateur non trouvé !' });
             }
             // Comparaison du mot de passe entré avec le hash de la base de données
             bcrypt.compare(req.body.password, user.password)
