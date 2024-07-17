@@ -1,12 +1,16 @@
 const express = require('express');
 const mongoose = require('mongoose');
-
+require('dotenv').config()
 const booksRoutes = require('./routes/books');
 const userRoutes = require ('./routes/user');
 const path = require ('path');
 
+const userdb = process.env.MONGODB_ID;
+const pwddb = process.env.MONGODB_PASSWORD;
+const urldb = process.env.MONGODB_URL;
+
 // connexion à la base de données
-mongoose.connect('mongodb+srv://MonVieuxGrimoire:w53IEU1EGXcIDonr@cluster0.srwo35g.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0',
+mongoose.connect('mongodb+srv://'+ userdb +':'+ pwddb +'@' + urldb + '/?retryWrites=true&w=majority&appName=Cluster0',
   { useNewUrlParser: true,
     useUnifiedTopology: true })
   .then(() => console.log('Connexion à MongoDB réussie !'))
