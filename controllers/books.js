@@ -110,7 +110,8 @@ exports.createBook = (req, res, next) => {
   
         // Puis on met à jour la note moyenne "averageRating"
         const totalRatings = book.ratings.length;
-        const sumRatings = book.ratings.reduce((sum, r) => sum + r.grade, 0); // méthode réduce est une fonction de réduction qui prend une fonction de rappel ((sum, r) => sum + r.grade) et un argument final (0) qui représente la valeur initiale de sum
+        // sum= accumulateur booklist= current value.ajoute la valeur de l'élément actuel à la somme déjà calculée des valeurs précédentes.
+        const sumRatings = book.ratings.reduce((sum, booklist) => sum + booklist.grade, 0); //  un argument final (0) qui représente la valeur initiale de sum
         const newAverageRating = sumRatings / totalRatings;
 
         book.averageRating = parseFloat(newAverageRating.toFixed(2)); // parseFloat converti string en number & toFixed(2) limite à deux decimales

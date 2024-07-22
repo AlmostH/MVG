@@ -1,5 +1,5 @@
 const sharp = require('sharp');
-
+// gerer les fichiers
 const fs = require('fs');
 
 const resizeImage = (req, res, next) => {
@@ -10,7 +10,7 @@ const resizeImage = (req, res, next) => {
 
 
   sharp(req.file.path)
-    .resize({ width: 206, height: 260 })
+    .resize({ width: 500})
     .toFormat('webp')
     .toFile(req.file.path.replace(/\.(jpg|jpeg|png)$/, '.webp'))
 
